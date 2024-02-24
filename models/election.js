@@ -8,10 +8,11 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
 
-    static addElection({ electionName, adminID }) {
+    static addElection({ electionName, adminID, urlString }) {
       return this.create({
         electionName,
         adminID,
+        urlString,
       });
     }
 
@@ -46,6 +47,14 @@ module.exports = (sequelize, DataTypes) => {
       });
     }
 
+    static getElectionURL(urlString) {
+      return this.findOne({
+        where: {
+          urlString,
+        },
+      });
+    }
+
     static associate(models) {
       // define association here
       Election.belongsTo(models.Admin, {
@@ -66,6 +75,11 @@ module.exports = (sequelize, DataTypes) => {
       electionName: {
         type: DataTypes.STRING,
         allowNull: false,
+      },
+      urlString: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        unique: true,
       },
       running: {
         type: DataTypes.BOOLEAN,
